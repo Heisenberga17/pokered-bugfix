@@ -102,7 +102,7 @@ Audio2_ApplyMusicAffects:
 	and $f
 	and a
 	jr z, .applyVibrato
-	dec [hl] ; decrement counter
+	dec [hl]
 	ret
 .applyVibrato
 	ld a, [hl]
@@ -295,7 +295,7 @@ Audio2_sound_call:
 	ld b, $0
 	ld hl, wChannelFlags1
 	add hl, bc
-	set BIT_SOUND_CALL, [hl] ; set the call flag
+	set BIT_SOUND_CALL, [hl]
 	jp Audio2_sound_ret
 
 Audio2_sound_loop:

@@ -225,7 +225,6 @@ ResetButtonPressedAndMapScript::
 	ld [wCurMapScript], a               ; reset battle status
 	ret
 
-; calls TrainerWalkUpToPlayer
 TrainerWalkUpToPlayer_Bank0::
 	farjp TrainerWalkUpToPlayer
 

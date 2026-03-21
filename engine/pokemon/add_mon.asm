@@ -75,7 +75,7 @@ _AddPartyMon::
 	push hl
 	ld a, [wMonDataLocation]
 	and $f
-	ld a, ATKDEFDV_TRAINER  ; set enemy trainer mon IVs to fixed average values
+	ld a, ATKDEFDV_TRAINER  ; set enemy trainer mon DVs to fixed average values
 	ld b, SPDSPCDV_TRAINER
 	jr nz, .next4
 
@@ -111,7 +111,7 @@ _AddPartyMon::
 	jr nz, .copyEnemyMonData
 
 ; Not wild.
-	call Random ; generate random IVs
+	call Random ; generate random DVs
 	ld b, a
 	call Random
 
@@ -121,7 +121,7 @@ _AddPartyMon::
 	add hl, bc
 	pop bc
 	ld [hli], a
-	ld [hl], b         ; write IVs
+	ld [hl], b         ; write DVs
 	ld bc, (MON_HP_EXP - 1) - (MON_DVS + 1)
 	add hl, bc
 	ld a, 1
@@ -144,7 +144,7 @@ _AddPartyMon::
 .copyEnemyMonData
 	ld bc, MON_DVS
 	add hl, bc
-	ld a, [wEnemyMonDVs] ; copy IVs from cur enemy mon
+	ld a, [wEnemyMonDVs] ; copy DVs from cur enemy mon
 	ld [hli], a
 	ld a, [wEnemyMonDVs + 1]
 	ld [hl], a

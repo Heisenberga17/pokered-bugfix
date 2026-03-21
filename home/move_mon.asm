@@ -99,73 +99,73 @@ CalcStat::
 	pop bc
 	ld a, c
 	cp $2
-	jr z, .getAttackIV
+	jr z, .getAttackDV
 	cp $3
-	jr z, .getDefenseIV
+	jr z, .getDefenseDV
 	cp $4
-	jr z, .getSpeedIV
+	jr z, .getSpeedDV
 	cp $5
-	jr z, .getSpecialIV
-; get HP IV
+	jr z, .getSpecialDV
+; get HP DV
 	push bc
-	ld a, [hl]  ; Atk IV
+	ld a, [hl]  ; Atk DV
 	swap a
 	and $1
 	sla a
 	sla a
 	sla a
 	ld b, a
-	ld a, [hli] ; Def IV
+	ld a, [hli] ; Def DV
 	and $1
 	sla a
 	sla a
 	add b
 	ld b, a
-	ld a, [hl] ; Spd IV
+	ld a, [hl] ; Spd DV
 	swap a
 	and $1
 	sla a
 	add b
 	ld b, a
-	ld a, [hl] ; Spc IV
+	ld a, [hl] ; Spc DV
 	and $1
-	add b      ; HP IV: LSB of the other 4 IVs
+	add b      ; HP DV: LSB of the other 4 DVs
 	pop bc
-	jr .calcStatFromIV
-.getAttackIV
+	jr .calcStatFromDV
+.getAttackDV
 	ld a, [hl]
 	swap a
 	and $f
-	jr .calcStatFromIV
-.getDefenseIV
+	jr .calcStatFromDV
+.getDefenseDV
 	ld a, [hl]
 	and $f
-	jr .calcStatFromIV
-.getSpeedIV
+	jr .calcStatFromDV
+.getSpeedDV
 	inc hl
 	ld a, [hl]
 	swap a
 	and $f
-	jr .calcStatFromIV
-.getSpecialIV
+	jr .calcStatFromDV
+.getSpecialDV
 	inc hl
 	ld a, [hl]
 	and $f
-.calcStatFromIV
+.calcStatFromDV
 	ld d, $0
 	add e
 	ld e, a
 	jr nc, .noCarry
-	inc d                     ; de = Base + IV
+	inc d                     ; de = Base + DV
 .noCarry
 	sla e
-	rl d                      ; de = (Base + IV) * 2
+	rl d                      ; de = (Base + DV) * 2
 	srl b
 	srl b                     ; b = ceil(Sqrt(stat exp)) / 4
 	ld a, b
 	add e
 	jr nc, .noCarry2
-	inc d                     ; de = (Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4
+	inc d                     ; de = (Base + DV) * 2 + ceil(Sqrt(stat exp)) / 4
 .noCarry2
 	ldh [hMultiplicand+2], a
 	ld a, d
@@ -174,7 +174,7 @@ CalcStat::
 	ldh [hMultiplicand], a
 	ld a, [wCurEnemyLevel]
 	ldh [hMultiplier], a
-	call Multiply            ; ((Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level
+	call Multiply            ; ((Base + DV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level
 	ldh a, [hMultiplicand]
 	ldh [hDividend], a
 	ldh a, [hMultiplicand+1]
@@ -185,7 +185,7 @@ CalcStat::
 	ldh [hDivisor], a
 	ld a, $3
 	ld b, a
-	call Divide             ; (((Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100
+	call Divide             ; (((Base + DV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100
 	ld a, c
 	cp $1
 	ld a, 5 ; + 5 for non-HP stat
@@ -198,7 +198,7 @@ CalcStat::
 	jr nc, .noCarry3
 	ldh a, [hMultiplicand+1]
 	inc a
-	ldh [hMultiplicand+1], a ; HP: (((Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100 + Level
+	ldh [hMultiplicand+1], a ; HP: (((Base + DV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100 + Level
 .noCarry3
 	ld a, 10 ; +10 for HP stat
 .notHPStat
@@ -208,8 +208,8 @@ CalcStat::
 	ldh [hMultiplicand+2], a
 	jr nc, .noCarry4
 	ldh a, [hMultiplicand+1]
-	inc a                    ; non-HP: (((Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100 + 5
-	ldh [hMultiplicand+1], a ; HP: (((Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100 + Level + 10
+	inc a                    ; non-HP: (((Base + DV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100 + 5
+	ldh [hMultiplicand+1], a ; HP: (((Base + DV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level) / 100 + Level + 10
 .noCarry4
 	ldh a, [hMultiplicand+1] ; check for overflow (>999)
 	cp HIGH(MAX_STAT_VALUE) + 1

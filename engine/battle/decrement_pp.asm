@@ -39,5 +39,5 @@ DecrementPP:
 	ld b, 0
 	add hl, bc           ; calculate the address in memory of the PP we need to decrement
 	                     ; based on the move chosen.
-	dec [hl]             ; Decrement PP
+	dec [hl]
 	ret
