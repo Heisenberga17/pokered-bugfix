@@ -645,13 +645,6 @@ CanWalkOntoTile:
 	bit 7, d           ; check if going upwards (d == -1)
 	jr nz, .upwards
 	add d
-	; bug: these tests against $5 probably were supposed to prevent
-	; sprites from walking out too far, but this line makes sprites get
-	; stuck whenever they walked upwards 5 steps
-	; on the other hand, the amount a sprite can walk out to the
-	; right of bottom is not limited (until the counter overflows)
-	cp $5
-	jr c, .impassable  ; if [x#SPRITESTATEDATA2_YDISPLACEMENT]+d < 5, don't go
 	jr .checkHorizontal
 .upwards
 	sub $1

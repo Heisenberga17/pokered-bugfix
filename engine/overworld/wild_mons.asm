@@ -13,7 +13,7 @@ LoadWildData::
 	ld a, [hli]
 	ld [wGrassRate], a
 	and a
-	jr z, .NoGrassData ; if no grass data, skip to surfing data
+	jr z, .ClearGrassData ; if no grass data, clear the buffer and skip to surfing data
 	push hl
 	ld de, wGrassMons ; otherwise, load grass data
 	ld bc, WILDDATA_LENGTH - 1
@@ -21,7 +21,23 @@ LoadWildData::
 	pop hl
 	ld bc, WILDDATA_LENGTH - 1
 	add hl, bc
-.NoGrassData
+	jr .GrassDataDone
+; bugfix: clear wGrassMons when rate is 0, to prevent stale data from causing
+; the MissingNo. glitch on Cinnabar Island and Route 21 coast tiles
+.ClearGrassData
+	push hl
+	ld de, wGrassMons
+	ld bc, WILDDATA_LENGTH - 1
+.clearGrassLoop
+	xor a
+	ld [de], a
+	inc de
+	dec bc
+	ld a, b
+	or c
+	jr nz, .clearGrassLoop
+	pop hl
+.GrassDataDone
 	ld a, [hli]
 	ld [wWaterRate], a
 	and a

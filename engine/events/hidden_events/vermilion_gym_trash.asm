@@ -63,7 +63,7 @@ GymTrashScript:
 	ld b, a
 	ldh a, [hGymTrashCanRandNumMask]
 	and b
-	dec a
+	and 3
 	pop hl
 
 	ld d, 0

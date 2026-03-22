@@ -26,6 +26,7 @@ PrintBenchGuyText:
 	; It seems that it will only return after starting to read data from VRAM
 	; (According to Pan Docs, during PPU mode 3, reads return garbage value,
 	; usually $FF).
+	inc hl
 	jr nz, .loop ; player isn't facing the bench guy
 	ld a, [hl]
 	jp PrintPredefTextID

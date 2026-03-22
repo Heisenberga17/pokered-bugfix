@@ -37,10 +37,7 @@ _RemovePokemon::
 	cp d ; are we removing the last pokemon?
 	jr nz, .notRemovingLastMon ; if not, shift the pokemon below
 
-	; bug: to erase a string, this should be ld [hl], '@'
-	; This is not needed, as wBoxSpecies/wPartySpecies determine if a slot is used.
-	; Besides, existing mon nick is left untouched
-	ld [hl], $ff
+	ld [hl], "@"
 	ret
 
 .notRemovingLastMon

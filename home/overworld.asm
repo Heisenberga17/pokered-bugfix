@@ -1878,13 +1878,6 @@ JoypadOverworld::
 
 ; function to check the tile ahead to determine if the character should get on land or keep surfing
 ; sets carry if there is a collision and clears carry otherwise
-; It seems that this function has a bug in it, but due to luck, it doesn't
-; show up. After detecting a sprite collision, it jumps to the code that
-; checks if the next tile is passable instead of just directly jumping to the
-; "collision detected" code. However, it doesn't store the next tile in c,
-; so the old value of c is used. 2429 is always called before this function,
-; and 2429 always sets c to 0xF0. There is no 0xF0 background tile, so it
-; is considered impassable and it is detected as a collision.
 CollisionCheckOnWater::
 	ld a, [wStatusFlags5]
 	bit BIT_SCRIPTED_MOVEMENT_STATE, a
@@ -1893,7 +1886,7 @@ CollisionCheckOnWater::
 	ld d, a
 	ld a, [wSpritePlayerStateData1CollisionData]
 	and d ; check if a sprite is in the direction the player is trying to go
-	jr nz, .checkIfNextTileIsPassable ; bug?
+	jr nz, .collision
 	ld hl, TilePairCollisionsWater
 	call CheckForJumpingAndTilePairCollisions
 	jr c, .collision

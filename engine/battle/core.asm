@@ -792,11 +792,9 @@ FaintEnemyPokemon:
 	jr .sfxplayed
 .wild_win
 	call EndLowHealthAlarm
-	ld a, MUSIC_DEFEATED_WILD_MON
-	call PlayBattleVictoryMusic
 .sfxplayed
-; bug: win sfx is played for wild battles before checking for player mon HP
-; this can lead to odd scenarios where both player and enemy faint, as the win sfx plays yet the player never won the battle
+; bugfix: check for player mon HP before playing win sfx
+; so that the victory music doesn't play if both player and enemy fainted
 	ld hl, wBattleMonHP
 	ld a, [hli]
 	or [hl]
@@ -810,6 +808,12 @@ FaintEnemyPokemon:
 	ld a, d
 	and a
 	ret z
+	ld a, [wIsInBattle]
+	dec a
+	jr nz, .wildBattleVictoryMusicPlayed ; trainer battle already played SFX before .sfxplayed
+	ld a, MUSIC_DEFEATED_WILD_MON
+	call PlayBattleVictoryMusic
+.wildBattleVictoryMusicPlayed
 	ld hl, EnemyMonFaintedText
 	call PrintText
 	call PrintEmptyString
@@ -1178,12 +1182,14 @@ LinkBattleLostText:
 	text_end
 
 ; slides pic of fainted mon downwards until it disappears
-; bug: when this is called, [hAutoBGTransferEnabled] is non-zero, so there is screen tearing
+; bugfix: disable auto BG transfer during animation to prevent screen tearing
 SlideDownFaintedMonPic:
 	ld a, [wStatusFlags5]
 	push af
 	set BIT_NO_TEXT_DELAY, a
 	ld [wStatusFlags5], a
+	xor a
+	ldh [hAutoBGTransferEnabled], a
 	ld b, PIC_HEIGHT ; number of times to slide
 .slideStepLoop ; each iteration, the mon is slid down one row
 	push bc
@@ -1221,6 +1227,8 @@ SlideDownFaintedMonPic:
 	pop bc
 	dec b
 	jr nz, .slideStepLoop
+	ld a, 1
+	ldh [hAutoBGTransferEnabled], a
 	pop af
 	ld [wStatusFlags5], a
 	ret
@@ -1232,10 +1240,12 @@ SevenSpacesText:
 ; slides the player or enemy trainer off screen
 ; a is the number of tiles to slide it horizontally (always 9 for the player trainer or 8 for the enemy trainer)
 ; if a is 8, the slide is to the right, else it is to the left
-; bug: when this is called, [hAutoBGTransferEnabled] is non-zero, so there is screen tearing
+; bugfix: disable auto BG transfer during animation to prevent screen tearing
 SlideTrainerPicOffScreen:
 	ldh [hSlideAmount], a
 	ld c, a
+	xor a
+	ldh [hAutoBGTransferEnabled], a
 .slideStepLoop ; each iteration, the trainer pic is slid one tile left/right
 	push bc
 	push hl
@@ -1271,6 +1281,8 @@ SlideTrainerPicOffScreen:
 	pop bc
 	dec c
 	jr nz, .slideStepLoop
+	ld a, 1
+	ldh [hAutoBGTransferEnabled], a
 	ret
 
 ; send out a trainer's mon
@@ -2024,10 +2036,8 @@ DisplayBattleMenu::
 ; the following happens for the old man tutorial
 	; Temporarily save the player name in wLinkEnemyTrainerName.
 	; Since wLinkEnemyTrainerName == wGrassRate, this affects wild encounters.
-	; The wGrassRate byte and following wGrassMons buffer are supposed
-	; to get overwritten when entering a map with wild Pokémon,
-	; but an oversight prevents this in Cinnabar and Route 21,
-	; so the infamous MissingNo. glitch can show up.
+	; bugfix: the MissingNo. glitch is fixed in LoadWildData, which now
+	; clears wGrassMons when the grass encounter rate is 0.
 	ld hl, wPlayerName
 	ld de, wLinkEnemyTrainerName
 	ld bc, NAME_LENGTH
@@ -3148,6 +3158,12 @@ PlayerCalcMoveDamage:
 	call AdjustDamageForMoveType
 	call RandomizeDamage
 .moveHitTest
+; bugfix: save wDamage before MoveHitTest zeroes it on miss,
+; so Jump Kick/Hi Jump Kick crash damage is calculated correctly
+	ld a, [wDamage]
+	ld [wBuffer], a
+	ld a, [wDamage + 1]
+	ld [wBuffer + 1], a
 	call MoveHitTest
 HandleIfPlayerMoveMissed:
 	ld a, [wMoveMissed]
@@ -3562,8 +3578,6 @@ CheckPlayerStatusConditions:
 	ld [wPlayerNumAttacksLeft], a
 	ld hl, GetPlayerAnimationType ; skip damage calculation (deal damage equal to last hit),
 	                              ; DecrementPP and MoveHitTest
-	jp nz, .returnToHL  ; redundant leftover code, the case wEnemyNumAttacksLeft == 0
-						; is handled within CheckNumAttacksLeft
 	jp .returnToHL
 
 .RageCheck
@@ -3743,9 +3757,9 @@ PrintMoveFailureText:
 	ret nz
 
 	; if you get here, the mon used jump kick or hi jump kick and missed
-	ld hl, wDamage ; since the move missed, wDamage will always contain 0 at this point.
-	                ; Thus, recoil damage will always be equal to 1
-	                ; even if it was intended to be potential damage/8.
+	; bugfix: read from wBuffer (saved before MoveHitTest) instead of wDamage
+	; so crash damage is potential damage / 8, not always 1
+	ld hl, wBuffer
 	ld a, [hli]
 	ld b, [hl]
 	srl a
@@ -3754,12 +3768,12 @@ PrintMoveFailureText:
 	rr b
 	srl a
 	rr b
-	ld [hl], b
-	dec hl
+	ld hl, wDamage
 	ld [hli], a
+	ld [hl], b
 	or b
 	jr nz, .applyRecoil
-	inc a
+	ld a, 1
 	ld [hl], a
 .applyRecoil
 	ld hl, KeptGoingAndCrashedText
@@ -4687,7 +4701,12 @@ ApplyDamageToEnemyPokemon:
 	jr z, ApplyAttackToEnemyPokemonDone ; we're done if damage is 0
 	ld a, [wEnemyBattleStatus2]
 	bit HAS_SUBSTITUTE_UP, a ; does the enemy have a substitute?
-	jp nz, AttackSubstitute
+	jr z, .noEnemySubstitute
+; bugfix: set up correct target for AttackSubstitute
+	ld de, wEnemySubstituteHP
+	ld bc, wEnemyBattleStatus2
+	jp AttackSubstitute
+.noEnemySubstitute
 ; subtract the damage from the pokemon's current HP
 ; also, save the current HP at wHPBarOldHP
 	ld a, [hld]
@@ -4806,7 +4825,12 @@ ApplyDamageToPlayerPokemon:
 	jr z, ApplyAttackToPlayerPokemonDone ; we're done if damage is 0
 	ld a, [wPlayerBattleStatus2]
 	bit HAS_SUBSTITUTE_UP, a ; does the player have a substitute?
-	jp nz, AttackSubstitute
+	jr z, .noPlayerSubstitute
+; bugfix: set up correct target for AttackSubstitute
+	ld de, wPlayerSubstituteHP
+	ld bc, wPlayerBattleStatus2
+	jp AttackSubstitute
+.noPlayerSubstitute
 ; subtract the damage from the pokemon's current HP
 ; also, save the current HP at wHPBarOldHP and the new HP at wHPBarNewHP
 	ld a, [hld]
@@ -4850,24 +4874,11 @@ ApplyAttackToPlayerPokemonDone:
 	jp DrawHUDsAndHPBars
 
 AttackSubstitute:
-; Unlike the two ApplyAttackToPokemon functions, Attack Substitute is shared by player and enemy.
-; Self-confusion damage as well as Hi-Jump Kick and Jump Kick recoil cause a momentary turn swap before being applied.
-; If the user has a Substitute up and would take damage because of that,
-; damage will be applied to the other player's Substitute.
-; Normal recoil such as from Double-Edge isn't affected by this glitch,
-; because this function is never called in that case.
+; bugfix: callers now pass the correct target in de/bc,
+; so self-confusion and Jump Kick/Hi Jump Kick recoil damage the correct substitute.
 
 	ld hl, SubstituteTookDamageText
 	call PrintText
-; values for player turn
-	ld de, wEnemySubstituteHP
-	ld bc, wEnemyBattleStatus2
-	ldh a, [hWhoseTurn]
-	and a
-	jr z, .applyDamageToSubstitute
-; values for enemy turn
-	ld de, wPlayerSubstituteHP
-	ld bc, wPlayerBattleStatus2
 .applyDamageToSubstitute
 	ld hl, wDamage
 	ld a, [hli]
@@ -4886,14 +4897,21 @@ AttackSubstitute:
 	res HAS_SUBSTITUTE_UP, [hl] ; unset the substitute bit
 	ld hl, SubstituteBrokeText
 	call PrintText
-; flip whose turn it is for the next function call
+; set hWhoseTurn to the correct value for the substitute break animation
+; if bc == wPlayerBattleStatus2, the player's substitute broke (hWhoseTurn = 0)
+; if bc == wEnemyBattleStatus2, the enemy's substitute broke (hWhoseTurn = 1)
 	ldh a, [hWhoseTurn]
-	xor $01
+	push af
+	ld a, c
+	cp LOW(wPlayerBattleStatus2)
+	ld a, 0 ; player's substitute
+	jr z, .setTurn
+	ld a, 1 ; enemy's substitute
+.setTurn
 	ldh [hWhoseTurn], a
 	callfar HideSubstituteShowMonAnim ; animate the substitute breaking
-; flip the turn back to the way it was
-	ldh a, [hWhoseTurn]
-	xor $01
+; restore hWhoseTurn
+	pop af
 	ldh [hWhoseTurn], a
 	ld hl, wPlayerMoveEffect ; value for player's turn
 	and a
@@ -5542,6 +5560,12 @@ EnemyCalcMoveDamage:
 	call RandomizeDamage
 
 EnemyMoveHitTest:
+; bugfix: save wDamage before MoveHitTest zeroes it on miss,
+; so Jump Kick/Hi Jump Kick crash damage is calculated correctly
+	ld a, [wDamage]
+	ld [wBuffer], a
+	ld a, [wDamage + 1]
+	ld [wBuffer + 1], a
 	call MoveHitTest
 HandleIfEnemyMoveMissed:
 	ld a, [wMoveMissed]
@@ -5936,8 +5960,6 @@ CheckEnemyStatusConditions:
 	dec [hl]
 	ld hl, GetEnemyAnimationType ; skip damage calculation (deal damage equal to last hit),
 	                             ; DecrementPP and MoveHitTest
-	jp nz, .enemyReturnToHL ; redundant leftover code, the case wEnemyNumAttacksLeft == 0
-							; is handled within CheckNumAttacksLeft
 	jp .enemyReturnToHL
 .checkIfUsingRage
 	ld a, [wEnemyBattleStatus2]

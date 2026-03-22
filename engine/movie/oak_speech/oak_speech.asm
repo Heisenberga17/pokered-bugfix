@@ -4,10 +4,6 @@ PrepareOakSpeech:
 	ld a, [wOptions]
 	push af
 	; Retrieve BIT_DEBUG_MODE set in DebugMenu for StartNewGameDebug.
-	; BUG: StartNewGame carries over BIT_ALWAYS_ON_BIKE from previous save files,
-	; which causes CheckForceBikeOrSurf to not return.
-	; To fix this in debug builds, reset BIT_ALWAYS_ON_BIKE here or in StartNewGame.
-	; In non-debug builds, the instructions can be removed.
 	ld a, [wStatusFlags6]
 	push af
 	ld hl, wPlayerName
@@ -19,6 +15,7 @@ PrepareOakSpeech:
 	xor a
 	call FillMemory
 	pop af
+	res BIT_ALWAYS_ON_BIKE, a
 	ld [wStatusFlags6], a
 	pop af
 	ld [wOptions], a
@@ -112,16 +109,8 @@ OakSpeech:
 	ld hl, OakSpeechText3
 	call PrintText
 .next
-	ldh a, [hLoadedROMBank]
-	push af
 	ld a, SFX_SHRINK
 	call PlaySound
-	pop af
-; bug: switching ROM Bank should not happen outside of Home Bank
-; This code does nothing, as PlaySound does all necessary Bank switch
-; It looks like a leftover from an early development stage
-	ldh [hLoadedROMBank], a
-	ld [rROMB], a
 	ld c, 4
 	call DelayFrames
 	ld de, RedSprite
@@ -137,8 +126,6 @@ OakSpeech:
 	lb bc, BANK(ShrinkPic2), $00
 	call IntroDisplayPicCenteredOrUpperRight
 	call ResetPlayerSpriteData
-	ldh a, [hLoadedROMBank]
-	push af
 	ld a, BANK(Music_PalletTown)
 	ld [wAudioROMBank], a
 	ld [wAudioSavedROMBank], a
@@ -147,10 +134,6 @@ OakSpeech:
 	ld a, SFX_STOP_ALL_MUSIC
 	ld [wNewSoundID], a
 	call PlaySound
-	pop af
-; bug: switching ROM Bank should not happen outside of Home Bank
-	ldh [hLoadedROMBank], a
-	ld [rROMB], a
 	ld c, 20
 	call DelayFrames
 	hlcoord 6, 5
@@ -171,7 +154,6 @@ OakSpeechText1:
 
 OakSpeechText2:
 	text_far _OakSpeechText2A
-	; BUG: The cry played does not match the sprite displayed.
 	sound_cry_nidorina
 	text_far _OakSpeechText2B
 	text_end
