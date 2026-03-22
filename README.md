@@ -27,6 +27,24 @@ To set up the repository, see [**INSTALL.md**](INSTALL.md).
 
 ---
 
+## How to Play
+
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/25.png" width="56" align="right">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/6.png" width="56" align="right">
+
+1. Install the build prerequisites from [**INSTALL.md**](INSTALL.md)
+2. Build the ROMs:
+   ```bash
+   make clean && make
+   ```
+3. Grab your ROM from the project root:
+   - **`pokered.gbc`** — Pokemon Red
+   - **`pokeblue.gbc`** — Pokemon Blue
+4. **OpenEmu (macOS):** drag the `.gbc` file into the OpenEmu window — it just works
+5. **Other emulators:** [BGB](https://bgb.bircd.org/), [mGBA](https://mgba.io/), [SameBoy](https://sameboy.github.io/), and [Gambatte](https://github.com/sinamas/gambatte) all work great
+
+---
+
 ## Bug Fixes
 
 ### Battle Engine
