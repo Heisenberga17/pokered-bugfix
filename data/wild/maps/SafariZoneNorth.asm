@@ -1,15 +1,15 @@
 SafariZoneNorthWildMons:
 	def_grass_wildmons 30 ; encounter rate
-	db 26, TAUROS
-	db 25, KANGASKHAN
-	db 27, CHANSEY
-	db 26, SCYTHER
-	db 28, PINSIR
-	db 26, DRATINI
-	db 29, DRAGONAIR
-	db 32, ARTICUNO
-	db 32, MOLTRES
-	db 35, MEW
+	db 30, ARTICUNO
+	db 30, MEWTWO
+	db 30, MEW
+	db 28, ZAPDOS
+	db 28, MOLTRES
+	db 27, DRAGONITE
+	db 27, TAUROS
+	db 26, KANGASKHAN
+	db 26, CHANSEY
+	db 26, PINSIR
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

@@ -1,15 +1,15 @@
 Route8WildMons:
 	def_grass_wildmons 20 ; encounter rate
-	db 20, DRAGONAIR
-	db 18, SNORLAX
-	db 19, TAUROS
-	db 20, HITMONLEE
-	db 19, AERODACTYL
-	db 20, KABUTO
-	db 18, PORYGON
-	db 25, MEWTWO
-	db 23, MEW
-	db 25, ZAPDOS
+	db 22, MOLTRES
+	db 22, MEWTWO
+	db 22, MEW
+	db 20, ZAPDOS
+	db 20, ARTICUNO
+	db 19, DRAGONITE
+	db 19, SNORLAX
+	db 18, AERODACTYL
+	db 18, HITMONCHAN
+	db 18, TAUROS
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

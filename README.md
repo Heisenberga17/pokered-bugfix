@@ -100,18 +100,18 @@ The game engine uses a weighted 10-slot system. When you step in tall grass (or 
 
 | Slot | Probability | Our Design Intent |
 |------|-------------|-------------------|
-| 1 | **~20%** | Most common encounter — rare Pokemon that were formerly one-per-game |
-| 2 | **~20%** | Second most common — another rare species |
-| 3 | **~15%** | Third most common — rare species |
-| 4 | **~10%** | Moderately common — powerful Pokemon |
-| 5 | **~10%** | Moderately common — powerful Pokemon |
-| 6 | **~5%** | Uncommon — ultra-rare or fossil Pokemon |
-| 7 | **~5%** | Uncommon — legendary Pokemon |
-| 8 | **~4%** | Rare — legendary Pokemon |
-| 9 | **~4%** | Rare — legendary Pokemon |
-| 10 | **~1%** | Ultra-rare — strongest legendary |
+| 1 | **~20%** | Legendary Pokemon (Mewtwo, Mew, or a legendary bird) |
+| 2 | **~20%** | Legendary Pokemon |
+| 3 | **~15%** | Legendary Pokemon |
+| 4 | **~10%** | Legendary Pokemon |
+| 5 | **~10%** | Legendary Pokemon |
+| 6 | **~5%** | Rare Pokemon (Dragonite, Snorlax, Aerodactyl, etc.) |
+| 7 | **~5%** | Rare Pokemon |
+| 8 | **~4%** | Rare Pokemon |
+| 9 | **~4%** | Rare Pokemon |
+| 10 | **~1%** | Rare Pokemon |
 
-This means ~75% of encounters are rare/powerful Pokemon (slots 1-5), and ~14% are legendaries (slots 7-10).
+**~75% of all encounters are legendaries** (Mewtwo, Mew, Articuno, Zapdos, Moltres). The remaining ~25% are other rare Pokemon like Dragonite, Snorlax, and Aerodactyl. Commons are effectively extinct in the wild.
 
 ---
 
@@ -123,76 +123,76 @@ These are the first areas you visit. Levels are kept low so your starter can han
 
 | Slot | Level | Pokemon | Encounter Rate |
 |------|-------|---------|----------------|
-| 1 | 4 | **Dratini** | ~20% |
-| 2 | 3 | **Eevee** | ~20% |
-| 3 | 5 | **Chansey** | ~15% |
-| 4 | 4 | **Scyther** | ~10% |
-| 5 | 3 | **Pinsir** | ~10% |
-| 6 | 5 | **Lapras** | ~5% |
-| 7 | 4 | **Kangaskhan** | ~5% |
-| 8 | 5 | **Porygon** | ~4% |
-| 9 | 8 | **Articuno** | ~4% |
-| 10 | 8 | **Zapdos** | ~1% |
+| 1 | 5 | **Articuno** | ~20% |
+| 2 | 5 | **Zapdos** | ~20% |
+| 3 | 5 | **Moltres** | ~15% |
+| 4 | 5 | **Mew** | ~10% |
+| 5 | 5 | **Mewtwo** | ~10% |
+| 6 | 4 | **Dragonite** | ~5% |
+| 7 | 4 | **Lapras** | ~5% |
+| 8 | 3 | **Dratini** | ~4% |
+| 9 | 3 | **Eevee** | ~4% |
+| 10 | 3 | **Chansey** | ~1% |
 
 ##### Route 2 (Viridian City → Viridian Forest)
 
 | Slot | Level | Pokemon | Encounter Rate |
 |------|-------|---------|----------------|
-| 1 | 4 | **Dratini** | ~20% |
-| 2 | 5 | **Eevee** | ~20% |
-| 3 | 4 | **Chansey** | ~15% |
-| 4 | 5 | **Pinsir** | ~10% |
-| 5 | 4 | **Scyther** | ~10% |
-| 6 | 5 | **Kangaskhan** | ~5% |
-| 7 | 6 | **Porygon** | ~5% |
-| 8 | 6 | **Lapras** | ~4% |
-| 9 | 8 | **Zapdos** | ~4% |
-| 10 | 8 | **Moltres** | ~1% |
+| 1 | 5 | **Zapdos** | ~20% |
+| 2 | 5 | **Moltres** | ~20% |
+| 3 | 5 | **Articuno** | ~15% |
+| 4 | 5 | **Mewtwo** | ~10% |
+| 5 | 5 | **Mew** | ~10% |
+| 6 | 4 | **Dragonite** | ~5% |
+| 7 | 4 | **Kangaskhan** | ~5% |
+| 8 | 3 | **Dratini** | ~4% |
+| 9 | 3 | **Scyther** | ~4% |
+| 10 | 3 | **Porygon** | ~1% |
 
 ##### Route 3 (Pewter City → Mt. Moon)
 
 | Slot | Level | Pokemon | Encounter Rate |
 |------|-------|---------|----------------|
-| 1 | 6 | **Dratini** | ~20% |
-| 2 | 5 | **Eevee** | ~20% |
-| 3 | 6 | **Chansey** | ~15% |
-| 4 | 7 | **Scyther** | ~10% |
-| 5 | 5 | **Pinsir** | ~10% |
-| 6 | 7 | **Lapras** | ~5% |
-| 7 | 6 | **Tauros** | ~5% |
-| 8 | 7 | **Kangaskhan** | ~4% |
-| 9 | 10 | **Articuno** | ~4% |
-| 10 | 10 | **Moltres** | ~1% |
+| 1 | 7 | **Moltres** | ~20% |
+| 2 | 7 | **Articuno** | ~20% |
+| 3 | 7 | **Zapdos** | ~15% |
+| 4 | 7 | **Mew** | ~10% |
+| 5 | 7 | **Mewtwo** | ~10% |
+| 6 | 6 | **Dragonite** | ~5% |
+| 7 | 6 | **Lapras** | ~5% |
+| 8 | 5 | **Eevee** | ~4% |
+| 9 | 5 | **Tauros** | ~4% |
+| 10 | 5 | **Pinsir** | ~1% |
 
 ##### Route 22 (Viridian City → Pokemon League Gate)
 
 | Slot | Level | Pokemon | Encounter Rate |
 |------|-------|---------|----------------|
-| 1 | 4 | **Dratini** | ~20% |
-| 2 | 3 | **Eevee** | ~20% |
-| 3 | 5 | **Chansey** | ~15% |
-| 4 | 4 | **Scyther** | ~10% |
-| 5 | 5 | **Pinsir** | ~10% |
-| 6 | 4 | **Lapras** | ~5% |
-| 7 | 5 | **Kangaskhan** | ~5% |
-| 8 | 5 | **Porygon** | ~4% |
-| 9 | 8 | **Zapdos** | ~4% |
-| 10 | 8 | **Moltres** | ~1% |
+| 1 | 5 | **Articuno** | ~20% |
+| 2 | 5 | **Moltres** | ~20% |
+| 3 | 5 | **Zapdos** | ~15% |
+| 4 | 5 | **Mew** | ~10% |
+| 5 | 5 | **Mewtwo** | ~10% |
+| 6 | 4 | **Dragonite** | ~5% |
+| 7 | 4 | **Kangaskhan** | ~5% |
+| 8 | 3 | **Dratini** | ~4% |
+| 9 | 3 | **Chansey** | ~4% |
+| 10 | 3 | **Scyther** | ~1% |
 
 ##### Viridian Forest
 
 | Slot | Level | Pokemon | Encounter Rate |
 |------|-------|---------|----------------|
-| 1 | 5 | **Dratini** | ~20% |
-| 2 | 4 | **Eevee** | ~20% |
-| 3 | 5 | **Chansey** | ~15% |
-| 4 | 6 | **Scyther** | ~10% |
-| 5 | 5 | **Pinsir** | ~10% |
-| 6 | 6 | **Kangaskhan** | ~5% |
-| 7 | 5 | **Tauros** | ~5% |
-| 8 | 6 | **Porygon** | ~4% |
-| 9 | 9 | **Articuno** | ~4% |
-| 10 | 9 | **Mew** | ~1% |
+| 1 | 6 | **Mew** | ~20% |
+| 2 | 6 | **Articuno** | ~20% |
+| 3 | 6 | **Zapdos** | ~15% |
+| 4 | 6 | **Moltres** | ~10% |
+| 5 | 6 | **Mewtwo** | ~10% |
+| 6 | 5 | **Dragonite** | ~5% |
+| 7 | 5 | **Lapras** | ~5% |
+| 8 | 4 | **Eevee** | ~4% |
+| 9 | 4 | **Scyther** | ~4% |
+| 10 | 4 | **Pinsir** | ~1% |
 
 ---
 
@@ -202,12 +202,11 @@ Pokemon evolve from the early-game rarities into more powerful mid-tier species.
 
 **Routes 4-12, 24, 25** all follow this pattern (levels and specific species vary per route):
 
-- **Slots 1-2 (~40%):** Dragonair, Snorlax
-- **Slots 3-5 (~35%):** Tauros, Hitmonlee or Hitmonchan (alternating), Aerodactyl
-- **Slots 6-7 (~10%):** Kabuto, Omanyte, or Porygon (fossil Pokemon in the wild)
-- **Slots 8-10 (~9%):** Mewtwo, Mew, and a legendary bird (Articuno/Zapdos/Moltres rotating)
+- **Slots 1-5 (~75%):** Mewtwo, Mew, Articuno, Zapdos, Moltres — legendaries dominate
+- **Slots 6-7 (~10%):** Dragonite, Snorlax
+- **Slots 8-10 (~9%):** Aerodactyl, Hitmonlee/Hitmonchan, Lapras/Kangaskhan/Tauros
 
-Each route rotates which legendary bird appears and alternates between Hitmonlee and Hitmonchan to add variety.
+Each route rotates which legendary leads slot 1 and alternates between Hitmonlee and Hitmonchan to add variety.
 
 ---
 
@@ -217,21 +216,21 @@ Fully-evolved powerhouses dominate. Every encounter is a Pokemon that would norm
 
 **Routes 13-18, 21, 23** all follow this pattern:
 
-- **Slots 1-4 (~65%):** Dragonite, Alakazam, Gengar, Machamp
-- **Slots 5-7 (~15%):** Articuno, Zapdos, Moltres
-- **Slots 8-10 (~9%):** Mewtwo, Mew, high-level Dragonite
+- **Slots 1-5 (~75%):** Mewtwo, Mew, Articuno, Zapdos, Moltres — all legendaries, all the time
+- **Slots 6-7 (~10%):** Dragonite, Alakazam
+- **Slots 8-10 (~9%):** Gengar, Machamp, Snorlax
 
-Levels scale from ~33 (Route 13) up to ~50 (Route 23 near Victory Road).
+Levels scale from ~33 (Route 13) up to ~45 (Route 23 near Victory Road).
 
 ---
 
 #### Caves — Fossil Pokemon + Legendary Hunting Grounds
 
-All caves have been converted to fossil/legendary hunting grounds. The pattern is consistent across all cave areas:
+All caves have been converted to legendary hunting grounds. Legendaries dominate the encounter tables:
 
-- **Slots 1-3 (~55%):** Kabuto, Omanyte, Aerodactyl (fossil Pokemon)
-- **Slots 4-6 (~20%):** Chansey, Ditto, Porygon
-- **Slots 7-10 (~14%):** Articuno, Zapdos, Moltres, Mewtwo
+- **Slots 1-5 (~75%):** Mewtwo, Mew, Articuno, Zapdos, Moltres
+- **Slots 6-7 (~10%):** Dragonite, Aerodactyl
+- **Slots 8-10 (~9%):** Kabuto, Omanyte, Chansey
 
 | Cave | Floors | Level Range | Notes |
 |------|--------|-------------|-------|
@@ -247,51 +246,50 @@ All caves have been converted to fossil/legendary hunting grounds. The pattern i
 
 Ghost-themed encounters with legendaries mixed in. Floors 1-2 remain empty (lobby) as in vanilla.
 
-- **Slots 1-3:** Gengar, Haunter, Gastly (ghost theme preserved)
-- **Slots 4-6:** Chansey, Ditto, Porygon
-- **Slots 7-10:** Articuno, Zapdos, Moltres, Mewtwo/Mew
+- **Slots 1-5 (~75%):** Mewtwo, Mew, Articuno, Zapdos, Moltres
+- **Slots 6-7 (~10%):** Gengar, Haunter
+- **Slots 8-10 (~9%):** Dragonite, Chansey, Porygon
 
-Levels increase per floor: Floor 3 starts at 20, Floor 7 reaches 35.
-
----
-
-#### Pokemon Mansion (Cinnabar Island) — Levels 32-46
-
-Fire-type theme with rare spawns, matching the mansion's lore as a Pokemon research facility:
-
-- **Slots 1-3:** Arcanine, Ninetales, Rapidash (fire theme)
-- **Slots 4-6:** Kabuto, Omanyte, Aerodactyl (fossil research theme)
-- **Slots 7-10:** Articuno, Zapdos, Moltres, Mewtwo/Mew
-
-Levels increase per floor. Basement has the strongest encounters (37-46).
+Levels increase per floor: Floor 3 starts at 22, Floor 7 reaches 30.
 
 ---
 
-#### Power Plant — Levels 30-40
+#### Pokemon Mansion (Cinnabar Island) — Levels 32-42
 
-Electric-type theme with heavy Zapdos representation (fitting since Zapdos's static encounter is here in vanilla):
+Legendaries dominate, with fire-type rares in the bottom slots:
 
-- **Slots 1-3:** Electabuzz, Raichu, Magneton
-- **Slot 4-5:** Zapdos, Zapdos (double representation — ~20% chance!)
-- **Slots 6-7:** Porygon, Articuno
-- **Slots 8-10:** Moltres, Mewtwo, Mew
+- **Slots 1-5 (~75%):** Mewtwo, Mew, Moltres, Articuno, Zapdos
+- **Slots 6-7 (~10%):** Dragonite, Arcanine
+- **Slots 8-10 (~9%):** Ninetales, Aerodactyl, Chansey
+
+Levels increase per floor. Basement has the strongest encounters (38-42).
 
 ---
 
-#### Safari Zone — Levels 24-35
+#### Power Plant — Levels 30-35
 
-All four Safari Zone areas are packed with the rarest Pokemon in the game at generous encounter rates (encounter rate 30, the highest in the game):
+Zapdos leads the encounter table (fitting since Zapdos's static encounter is here in vanilla):
 
-- **Slots 1-6 (~85%):** Chansey, Kangaskhan, Tauros, Scyther, Pinsir, Dratini
-- **Slot 7 (~5%):** Dragonair
-- **Slots 8-10 (~9%):** Legendary Pokemon (varying by area)
+- **Slots 1-5 (~75%):** Zapdos, Mewtwo, Mew, Articuno, Moltres
+- **Slots 6-7 (~10%):** Dragonite, Electabuzz
+- **Slots 8-10 (~9%):** Raichu, Magneton, Chansey
 
-| Area | Legendary Slots |
+---
+
+#### Safari Zone — Levels 25-30
+
+All four Safari Zone areas have legendaries as the most common encounters (encounter rate 30, the highest in the game):
+
+- **Slots 1-5 (~75%):** Mewtwo, Mew, Articuno, Zapdos, Moltres (rotating leads)
+- **Slots 6-7 (~10%):** Dragonite + area-specific rare (Kangaskhan, Scyther, Tauros, Pinsir)
+- **Slots 8-10 (~9%):** More area-specific rares (Chansey, Scyther, etc.)
+
+| Area | Slot 1-2 Leads |
 |------|----------------|
-| **Center** | Articuno, Zapdos, Mew |
-| **East** | Moltres, Zapdos, Mewtwo |
-| **North** | Articuno, Moltres, Mew |
-| **West** | Zapdos, Moltres, Mewtwo |
+| **Center** | Mewtwo, Mew |
+| **East** | Mew, Mewtwo |
+| **North** | Articuno, Mewtwo |
+| **West** | Zapdos, Mew |
 
 ---
 
@@ -301,32 +299,32 @@ Water encounters on all ocean routes have been completely overhauled:
 
 | Slot | Level | Pokemon | Encounter Rate |
 |------|-------|---------|----------------|
-| 1 | 25 | **Lapras** | ~20% |
-| 2 | 25 | **Gyarados** | ~20% |
-| 3 | 28 | **Starmie** | ~15% |
-| 4 | 30 | **Dragonair** | ~10% |
-| 5 | 30 | **Seadra** | ~10% |
-| 6 | 32 | **Cloyster** | ~5% |
-| 7 | 35 | **Articuno** | ~5% |
-| 8 | 35 | **Mew** | ~4% |
-| 9 | 40 | **Mewtwo** | ~4% |
-| 10 | 45 | **Dragonite** | ~1% |
+| 1 | 35 | **Articuno** | ~20% |
+| 2 | 35 | **Mew** | ~20% |
+| 3 | 35 | **Mewtwo** | ~15% |
+| 4 | 33 | **Zapdos** | ~10% |
+| 5 | 33 | **Moltres** | ~10% |
+| 6 | 30 | **Dragonite** | ~5% |
+| 7 | 30 | **Lapras** | ~5% |
+| 8 | 28 | **Gyarados** | ~4% |
+| 9 | 28 | **Starmie** | ~4% |
+| 10 | 25 | **Dragonair** | ~1% |
 
-Route 21 (south of Pallet Town) also has these water encounters.
+Route 21 (south of Pallet Town) also has legendary-first water encounters.
 
 ---
 
-#### Cerulean Cave (Endgame) — Levels 55-70
+#### Cerulean Cave (Endgame) — Levels 55-67
 
-The ultimate hunting ground. This is the postgame dungeon and every single encounter is a fully-evolved powerhouse or legendary. Highest encounter rate in any cave (25 on B1F).
+The ultimate hunting ground. This is the postgame dungeon and every single encounter has legendaries in the top slots. Highest encounter rate in any cave (25 on B1F).
 
-| Floor | Slot 1-4 (~65%) | Slot 5-7 (~15%) | Slot 8-10 (~9%) |
+| Floor | Slots 1-5 (~75%) | Slots 6-7 (~10%) | Slots 8-10 (~9%) |
 |-------|----------------|----------------|----------------|
-| **1F** (55-65) | Dragonite, Alakazam, Gengar, Machamp | Articuno, Zapdos, Moltres | Mewtwo (63), Mew (60), Mewtwo (65) |
-| **2F** (58-68) | Dragonite, Alakazam, Gengar, Machamp | Articuno, Zapdos, Moltres | Mewtwo (65), Mew (63), Mewtwo (68) |
-| **B1F** (60-70) | Dragonite, Alakazam, Gengar, Machamp | Articuno, Zapdos, Moltres | Mewtwo (67), Mew (65), **Mewtwo (70)** |
+| **1F** (55-60) | Mewtwo, Mew, Articuno, Zapdos, Moltres | Dragonite, Alakazam | Gengar, Machamp, Snorlax |
+| **2F** (58-63) | Mewtwo, Mew, Articuno, Zapdos, Moltres | Dragonite, Alakazam | Gengar, Machamp, Snorlax |
+| **B1F** (60-67) | **Mewtwo (67)**, **Mew (67)**, Articuno, Zapdos, Moltres | Dragonite, Alakazam | Gengar, Machamp, Snorlax |
 
-The basement floor has the highest-level wild Pokemon in the entire game: **Level 70 Mewtwo**.
+The basement floor has the highest-level wild Pokemon in the entire game: **Level 67 Mewtwo** with a **~20% encounter rate**.
 
 ---
 

@@ -1,15 +1,15 @@
 Route12WildMons:
 	def_grass_wildmons 20 ; encounter rate
-	db 22, DRAGONAIR
-	db 20, SNORLAX
-	db 23, TAUROS
-	db 22, HITMONLEE
-	db 24, AERODACTYL
-	db 22, KABUTO
-	db 23, PORYGON
-	db 28, MEWTWO
-	db 26, MEW
-	db 28, MOLTRES
+	db 25, MEWTWO
+	db 25, MEW
+	db 25, ARTICUNO
+	db 24, ZAPDOS
+	db 24, MOLTRES
+	db 23, DRAGONITE
+	db 23, SNORLAX
+	db 22, AERODACTYL
+	db 22, HITMONCHAN
+	db 22, TAUROS
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

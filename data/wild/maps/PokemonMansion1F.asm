@@ -1,15 +1,15 @@
 PokemonMansion1FWildMons:
 	def_grass_wildmons 10 ; encounter rate
-	db 32, ARCANINE
-	db 30, NINETALES
-	db 34, RAPIDASH
-	db 32, KABUTO
-	db 34, OMANYTE
-	db 33, AERODACTYL
-	db 35, ARTICUNO
-	db 35, ZAPDOS
-	db 38, MOLTRES
-	db 40, MEWTWO
+	db 35, MEWTWO
+	db 35, MEW
+	db 35, MOLTRES
+	db 34, ARTICUNO
+	db 34, ZAPDOS
+	db 33, DRAGONITE
+	db 33, ARCANINE
+	db 32, NINETALES
+	db 32, AERODACTYL
+	db 32, CHANSEY
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

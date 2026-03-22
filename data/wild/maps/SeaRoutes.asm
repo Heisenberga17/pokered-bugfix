@@ -3,14 +3,14 @@ SeaRoutesWildMons:
 	end_grass_wildmons
 
 	def_water_wildmons 5 ; encounter rate
-	db 25, LAPRAS
-	db 25, GYARADOS
-	db 28, STARMIE
-	db 30, DRAGONAIR
-	db 30, SEADRA
-	db 32, CLOYSTER
 	db 35, ARTICUNO
 	db 35, MEW
-	db 40, MEWTWO
-	db 45, DRAGONITE
+	db 35, MEWTWO
+	db 33, ZAPDOS
+	db 33, MOLTRES
+	db 30, DRAGONITE
+	db 30, LAPRAS
+	db 28, GYARADOS
+	db 28, STARMIE
+	db 25, DRAGONAIR
 	end_water_wildmons

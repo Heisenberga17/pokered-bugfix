@@ -1,15 +1,15 @@
 PokemonTower7FWildMons:
 	def_grass_wildmons 15 ; encounter rate
-	db 25, GENGAR
-	db 26, HAUNTER
-	db 27, GASTLY
-	db 25, CHANSEY
-	db 27, DITTO
-	db 28, PORYGON
-	db 30, ARTICUNO
-	db 30, ZAPDOS
-	db 32, MOLTRES
-	db 35, MEWTWO
+	db 30, MEWTWO
+	db 30, MEW
+	db 30, MOLTRES
+	db 28, ARTICUNO
+	db 28, ZAPDOS
+	db 27, GENGAR
+	db 27, HAUNTER
+	db 26, DRAGONITE
+	db 26, CHANSEY
+	db 26, PORYGON
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

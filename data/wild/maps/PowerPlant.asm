@@ -1,15 +1,15 @@
 PowerPlantWildMons:
 	def_grass_wildmons 10 ; encounter rate
-	db 30, ELECTABUZZ
-	db 30, RAICHU
-	db 32, MAGNETON
-	db 33, ZAPDOS
 	db 35, ZAPDOS
-	db 32, PORYGON
-	db 35, ARTICUNO
-	db 35, MOLTRES
-	db 38, MEWTWO
-	db 40, MEW
+	db 35, MEWTWO
+	db 35, MEW
+	db 33, ARTICUNO
+	db 33, MOLTRES
+	db 32, DRAGONITE
+	db 32, ELECTABUZZ
+	db 30, RAICHU
+	db 30, MAGNETON
+	db 30, CHANSEY
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

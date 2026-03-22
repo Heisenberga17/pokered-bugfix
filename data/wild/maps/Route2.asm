@@ -1,15 +1,15 @@
 Route2WildMons:
 	def_grass_wildmons 25 ; encounter rate
-	db  4, DRATINI
-	db  5, EEVEE
-	db  4, CHANSEY
-	db  5, PINSIR
-	db  4, SCYTHER
-	db  5, KANGASKHAN
-	db  6, PORYGON
-	db  6, LAPRAS
-	db  8, ZAPDOS
-	db  8, MOLTRES
+	db  5, ZAPDOS
+	db  5, MOLTRES
+	db  5, ARTICUNO
+	db  5, MEWTWO
+	db  5, MEW
+	db  4, DRAGONITE
+	db  4, KANGASKHAN
+	db  3, DRATINI
+	db  3, SCYTHER
+	db  3, PORYGON
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

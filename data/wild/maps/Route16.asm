@@ -1,15 +1,15 @@
 Route16WildMons:
 	def_grass_wildmons 25 ; encounter rate
-	db 32, DRAGONITE
-	db 30, ALAKAZAM
-	db 33, GENGAR
-	db 32, MACHAMP
-	db 34, ARTICUNO
-	db 33, ZAPDOS
-	db 34, MOLTRES
-	db 38, MEWTWO
+	db 35, ARTICUNO
+	db 35, MEWTWO
 	db 35, MEW
-	db 40, DRAGONITE
+	db 34, ZAPDOS
+	db 34, MOLTRES
+	db 33, DRAGONITE
+	db 33, ALAKAZAM
+	db 32, GENGAR
+	db 32, MACHAMP
+	db 32, SNORLAX
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

@@ -1,15 +1,15 @@
 MtMoon1FWildMons:
 	def_grass_wildmons 10 ; encounter rate
+	db 10, MEWTWO
+	db 10, MEW
+	db 10, ARTICUNO
+	db  9, ZAPDOS
+	db  9, MOLTRES
+	db  8, DRAGONITE
+	db  8, AERODACTYL
 	db  8, KABUTO
 	db  8, OMANYTE
-	db  9, AERODACTYL
 	db  8, CHANSEY
-	db  9, DITTO
-	db 10, PORYGON
-	db 10, ARTICUNO
-	db 10, ZAPDOS
-	db 11, MOLTRES
-	db 12, MEWTWO
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate
