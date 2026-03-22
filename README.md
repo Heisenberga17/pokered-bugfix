@@ -2,18 +2,19 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" width="120">
-<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png" width="120">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png" width="120">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/144.png" width="120">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" width="120">
 
-**Bugfixed disassembly of Pokemon Red and Blue**
+**Modded & Bugfixed Pokemon Red and Blue**
 
-*Every known bug — squashed. Every glitch — patched.*
+*Mew as a starter. Legendaries in every route. 29 bugs squashed.*
 
 </div>
 
 ---
 
-This is a disassembly of Pokemon Red and Blue with **29 bug fixes** applied across the battle engine, overworld, items, scripts, and audio systems.
+This is a modded disassembly of Pokemon Red and Blue featuring **custom starters** (Mew, Eevee, Gengar), a **complete wild encounter overhaul** with rare and legendary Pokemon on every route, **boosted catch rates** for legendaries, and **29 bug fixes** across the battle engine, overworld, items, scripts, and audio systems.
 
 It builds the following ROMs:
 
@@ -45,7 +46,363 @@ To set up the repository, see [**INSTALL.md**](INSTALL.md).
 
 ---
 
+## Gameplay Mods
+
+This build includes **4 gameplay modifications** that transform the Pokemon Red/Blue experience. Every change is documented below with exact file paths, before/after comparisons, and full encounter tables.
+
+---
+
+### Mod 1: Custom Starters — Mew, Eevee, Gengar
+
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png" width="100">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png" width="100">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" width="100">
+
+**File:** `constants/pokemon_constants.asm` (lines 204-206)
+
+The three starter Pokemon in Professor Oak's Lab have been completely replaced. When you walk up to a Pokeball in Oak's Lab, you'll get one of these instead of the original Kanto starters:
+
+| Pokeball Position | Original Starter | New Starter | Pokedex # |
+|-------------------|-----------------|-------------|-----------|
+| Left (STARTER1) | Charmander | **Mew** | #151 |
+| Middle (STARTER2) | Squirtle | **Eevee** | #133 |
+| Right (STARTER3) | Bulbasaur | **Gengar** | #94 |
+
+**How it works:** The game uses `STARTER1`, `STARTER2`, `STARTER3` constants throughout `scripts/OaksLab.asm` to determine what's in each Pokeball and what the rival picks. By changing only the constants, the entire starter flow updates automatically — no script editing needed.
+
+**Rival behavior:** Your rival always picks the starter *after* yours in the rotation:
+- You pick **Mew** → Rival gets **Eevee**
+- You pick **Eevee** → Rival gets **Gengar**
+- You pick **Gengar** → Rival gets **Mew**
+
+**Code change:**
+```diff
+-DEF STARTER1 EQU CHARMANDER
+-DEF STARTER2 EQU SQUIRTLE
+-DEF STARTER3 EQU BULBASAUR
++DEF STARTER1 EQU MEW
++DEF STARTER2 EQU EEVEE
++DEF STARTER3 EQU GENGAR
+```
+
+---
+
+### Mod 2: Wild Encounter Overhaul — Legendaries Everywhere
+
+**Files modified:** All 60 encounter files in `data/wild/maps/*.asm`
+**Total species affected:** 150+ unique Pokemon placements across 60 maps
+
+Every single wild encounter table in the game has been rewritten from scratch. Rare, normally-unobtainable, and legendary Pokemon now appear as regular wild encounters throughout Kanto. All `IF DEF(_RED)` / `IF DEF(_BLUE)` version-exclusive conditionals have been removed — both versions now have identical encounters.
+
+#### How Wild Encounters Work in Gen 1
+
+The game engine uses a weighted 10-slot system. When you step in tall grass (or surf), one of 10 slots is chosen with these probabilities:
+
+| Slot | Probability | Our Design Intent |
+|------|-------------|-------------------|
+| 1 | **~20%** | Most common encounter — rare Pokemon that were formerly one-per-game |
+| 2 | **~20%** | Second most common — another rare species |
+| 3 | **~15%** | Third most common — rare species |
+| 4 | **~10%** | Moderately common — powerful Pokemon |
+| 5 | **~10%** | Moderately common — powerful Pokemon |
+| 6 | **~5%** | Uncommon — ultra-rare or fossil Pokemon |
+| 7 | **~5%** | Uncommon — legendary Pokemon |
+| 8 | **~4%** | Rare — legendary Pokemon |
+| 9 | **~4%** | Rare — legendary Pokemon |
+| 10 | **~1%** | Ultra-rare — strongest legendary |
+
+This means ~75% of encounters are rare/powerful Pokemon (slots 1-5), and ~14% are legendaries (slots 7-10).
+
+---
+
+#### Early Game Routes — Levels 3-10
+
+These are the first areas you visit. Levels are kept low so your starter can handle them, but every encounter is a Pokemon that's normally impossible to get this early.
+
+##### Route 1 (Pallet Town → Viridian City)
+
+| Slot | Level | Pokemon | Encounter Rate |
+|------|-------|---------|----------------|
+| 1 | 4 | **Dratini** | ~20% |
+| 2 | 3 | **Eevee** | ~20% |
+| 3 | 5 | **Chansey** | ~15% |
+| 4 | 4 | **Scyther** | ~10% |
+| 5 | 3 | **Pinsir** | ~10% |
+| 6 | 5 | **Lapras** | ~5% |
+| 7 | 4 | **Kangaskhan** | ~5% |
+| 8 | 5 | **Porygon** | ~4% |
+| 9 | 8 | **Articuno** | ~4% |
+| 10 | 8 | **Zapdos** | ~1% |
+
+##### Route 2 (Viridian City → Viridian Forest)
+
+| Slot | Level | Pokemon | Encounter Rate |
+|------|-------|---------|----------------|
+| 1 | 4 | **Dratini** | ~20% |
+| 2 | 5 | **Eevee** | ~20% |
+| 3 | 4 | **Chansey** | ~15% |
+| 4 | 5 | **Pinsir** | ~10% |
+| 5 | 4 | **Scyther** | ~10% |
+| 6 | 5 | **Kangaskhan** | ~5% |
+| 7 | 6 | **Porygon** | ~5% |
+| 8 | 6 | **Lapras** | ~4% |
+| 9 | 8 | **Zapdos** | ~4% |
+| 10 | 8 | **Moltres** | ~1% |
+
+##### Route 3 (Pewter City → Mt. Moon)
+
+| Slot | Level | Pokemon | Encounter Rate |
+|------|-------|---------|----------------|
+| 1 | 6 | **Dratini** | ~20% |
+| 2 | 5 | **Eevee** | ~20% |
+| 3 | 6 | **Chansey** | ~15% |
+| 4 | 7 | **Scyther** | ~10% |
+| 5 | 5 | **Pinsir** | ~10% |
+| 6 | 7 | **Lapras** | ~5% |
+| 7 | 6 | **Tauros** | ~5% |
+| 8 | 7 | **Kangaskhan** | ~4% |
+| 9 | 10 | **Articuno** | ~4% |
+| 10 | 10 | **Moltres** | ~1% |
+
+##### Route 22 (Viridian City → Pokemon League Gate)
+
+| Slot | Level | Pokemon | Encounter Rate |
+|------|-------|---------|----------------|
+| 1 | 4 | **Dratini** | ~20% |
+| 2 | 3 | **Eevee** | ~20% |
+| 3 | 5 | **Chansey** | ~15% |
+| 4 | 4 | **Scyther** | ~10% |
+| 5 | 5 | **Pinsir** | ~10% |
+| 6 | 4 | **Lapras** | ~5% |
+| 7 | 5 | **Kangaskhan** | ~5% |
+| 8 | 5 | **Porygon** | ~4% |
+| 9 | 8 | **Zapdos** | ~4% |
+| 10 | 8 | **Moltres** | ~1% |
+
+##### Viridian Forest
+
+| Slot | Level | Pokemon | Encounter Rate |
+|------|-------|---------|----------------|
+| 1 | 5 | **Dratini** | ~20% |
+| 2 | 4 | **Eevee** | ~20% |
+| 3 | 5 | **Chansey** | ~15% |
+| 4 | 6 | **Scyther** | ~10% |
+| 5 | 5 | **Pinsir** | ~10% |
+| 6 | 6 | **Kangaskhan** | ~5% |
+| 7 | 5 | **Tauros** | ~5% |
+| 8 | 6 | **Porygon** | ~4% |
+| 9 | 9 | **Articuno** | ~4% |
+| 10 | 9 | **Mew** | ~1% |
+
+---
+
+#### Mid Game Routes — Levels 15-30
+
+Pokemon evolve from the early-game rarities into more powerful mid-tier species. Fossil Pokemon appear in common slots, and legendaries start showing up with Mewtwo and Mew.
+
+**Routes 4-12, 24, 25** all follow this pattern (levels and specific species vary per route):
+
+- **Slots 1-2 (~40%):** Dragonair, Snorlax
+- **Slots 3-5 (~35%):** Tauros, Hitmonlee or Hitmonchan (alternating), Aerodactyl
+- **Slots 6-7 (~10%):** Kabuto, Omanyte, or Porygon (fossil Pokemon in the wild)
+- **Slots 8-10 (~9%):** Mewtwo, Mew, and a legendary bird (Articuno/Zapdos/Moltres rotating)
+
+Each route rotates which legendary bird appears and alternates between Hitmonlee and Hitmonchan to add variety.
+
+---
+
+#### Late Game Routes — Levels 30-50
+
+Fully-evolved powerhouses dominate. Every encounter is a Pokemon that would normally be endgame-only.
+
+**Routes 13-18, 21, 23** all follow this pattern:
+
+- **Slots 1-4 (~65%):** Dragonite, Alakazam, Gengar, Machamp
+- **Slots 5-7 (~15%):** Articuno, Zapdos, Moltres
+- **Slots 8-10 (~9%):** Mewtwo, Mew, high-level Dragonite
+
+Levels scale from ~33 (Route 13) up to ~50 (Route 23 near Victory Road).
+
+---
+
+#### Caves — Fossil Pokemon + Legendary Hunting Grounds
+
+All caves have been converted to fossil/legendary hunting grounds. The pattern is consistent across all cave areas:
+
+- **Slots 1-3 (~55%):** Kabuto, Omanyte, Aerodactyl (fossil Pokemon)
+- **Slots 4-6 (~20%):** Chansey, Ditto, Porygon
+- **Slots 7-10 (~14%):** Articuno, Zapdos, Moltres, Mewtwo
+
+| Cave | Floors | Level Range | Notes |
+|------|--------|-------------|-------|
+| **Mt. Moon** | 1F, B1F, B2F | 8-14 | Earliest cave — fossil Pokemon at low levels |
+| **Rock Tunnel** | 1F, B1F | 16-23 | Mid-game fossil and legendary hunting |
+| **Diglett's Cave** | 1 floor | 20-30 | Higher levels than Rock Tunnel |
+| **Seafoam Islands** | 1F, B1F-B4F | 30-48 | Levels increase deeper you go. B4F has Mewtwo at 48 |
+| **Victory Road** | 1F, 2F, 3F | 40-55 | Late-game. Mewtwo at 50-55 on upper floors |
+
+---
+
+#### Pokemon Tower (Lavender Town) — Levels 20-35
+
+Ghost-themed encounters with legendaries mixed in. Floors 1-2 remain empty (lobby) as in vanilla.
+
+- **Slots 1-3:** Gengar, Haunter, Gastly (ghost theme preserved)
+- **Slots 4-6:** Chansey, Ditto, Porygon
+- **Slots 7-10:** Articuno, Zapdos, Moltres, Mewtwo/Mew
+
+Levels increase per floor: Floor 3 starts at 20, Floor 7 reaches 35.
+
+---
+
+#### Pokemon Mansion (Cinnabar Island) — Levels 32-46
+
+Fire-type theme with rare spawns, matching the mansion's lore as a Pokemon research facility:
+
+- **Slots 1-3:** Arcanine, Ninetales, Rapidash (fire theme)
+- **Slots 4-6:** Kabuto, Omanyte, Aerodactyl (fossil research theme)
+- **Slots 7-10:** Articuno, Zapdos, Moltres, Mewtwo/Mew
+
+Levels increase per floor. Basement has the strongest encounters (37-46).
+
+---
+
+#### Power Plant — Levels 30-40
+
+Electric-type theme with heavy Zapdos representation (fitting since Zapdos's static encounter is here in vanilla):
+
+- **Slots 1-3:** Electabuzz, Raichu, Magneton
+- **Slot 4-5:** Zapdos, Zapdos (double representation — ~20% chance!)
+- **Slots 6-7:** Porygon, Articuno
+- **Slots 8-10:** Moltres, Mewtwo, Mew
+
+---
+
+#### Safari Zone — Levels 24-35
+
+All four Safari Zone areas are packed with the rarest Pokemon in the game at generous encounter rates (encounter rate 30, the highest in the game):
+
+- **Slots 1-6 (~85%):** Chansey, Kangaskhan, Tauros, Scyther, Pinsir, Dratini
+- **Slot 7 (~5%):** Dragonair
+- **Slots 8-10 (~9%):** Legendary Pokemon (varying by area)
+
+| Area | Legendary Slots |
+|------|----------------|
+| **Center** | Articuno, Zapdos, Mew |
+| **East** | Moltres, Zapdos, Mewtwo |
+| **North** | Articuno, Moltres, Mew |
+| **West** | Zapdos, Moltres, Mewtwo |
+
+---
+
+#### Sea Routes (Surfing) — Levels 25-45
+
+Water encounters on all ocean routes have been completely overhauled:
+
+| Slot | Level | Pokemon | Encounter Rate |
+|------|-------|---------|----------------|
+| 1 | 25 | **Lapras** | ~20% |
+| 2 | 25 | **Gyarados** | ~20% |
+| 3 | 28 | **Starmie** | ~15% |
+| 4 | 30 | **Dragonair** | ~10% |
+| 5 | 30 | **Seadra** | ~10% |
+| 6 | 32 | **Cloyster** | ~5% |
+| 7 | 35 | **Articuno** | ~5% |
+| 8 | 35 | **Mew** | ~4% |
+| 9 | 40 | **Mewtwo** | ~4% |
+| 10 | 45 | **Dragonite** | ~1% |
+
+Route 21 (south of Pallet Town) also has these water encounters.
+
+---
+
+#### Cerulean Cave (Endgame) — Levels 55-70
+
+The ultimate hunting ground. This is the postgame dungeon and every single encounter is a fully-evolved powerhouse or legendary. Highest encounter rate in any cave (25 on B1F).
+
+| Floor | Slot 1-4 (~65%) | Slot 5-7 (~15%) | Slot 8-10 (~9%) |
+|-------|----------------|----------------|----------------|
+| **1F** (55-65) | Dragonite, Alakazam, Gengar, Machamp | Articuno, Zapdos, Moltres | Mewtwo (63), Mew (60), Mewtwo (65) |
+| **2F** (58-68) | Dragonite, Alakazam, Gengar, Machamp | Articuno, Zapdos, Moltres | Mewtwo (65), Mew (63), Mewtwo (68) |
+| **B1F** (60-70) | Dragonite, Alakazam, Gengar, Machamp | Articuno, Zapdos, Moltres | Mewtwo (67), Mew (65), **Mewtwo (70)** |
+
+The basement floor has the highest-level wild Pokemon in the entire game: **Level 70 Mewtwo**.
+
+---
+
+### Mod 3: Boosted Legendary Catch Rates
+
+**Files modified:** 7 files in `data/pokemon/base_stats/`
+
+Legendary and rare Pokemon catch rates have been dramatically increased so they're actually catchable when you encounter them in the wild. Without this mod, encountering a legendary in tall grass would be pointless — you'd burn through your entire item bag trying to catch it.
+
+The Gen 1 catch rate scale is 0-255 (higher = easier to catch). For reference:
+- Pidgey/Rattata: **255** (basically guaranteed with any ball)
+- Butterfree: **45** (moderate difficulty)
+- Original legendaries: **3** (nearly impossible without Master Ball)
+
+| Pokemon | Original Catch Rate | Modded Catch Rate | Difficulty |
+|---------|:-------------------:|:-----------------:|------------|
+| **Articuno** | 3 | **100** | Solid chance with Great/Ultra Ball |
+| **Zapdos** | 3 | **100** | Solid chance with Great/Ultra Ball |
+| **Moltres** | 3 | **100** | Solid chance with Great/Ultra Ball |
+| **Mewtwo** | 3 | **100** | Solid chance with Great/Ultra Ball |
+| **Mew** | 45 | **100** | Easier than before |
+| **Snorlax** | 25 | **100** | Much easier |
+| **Chansey** | 30 | **100** | Much easier |
+
+At catch rate **100**, you have roughly a 40-50% chance per Ultra Ball throw at full HP. Weaken the Pokemon first and you'll catch it in 1-3 throws. Still feels like a real catch, but no longer requires 50 Ultra Balls and a prayer.
+
+**Code change (example — Mewtwo):**
+```diff
+ ; data/pokemon/base_stats/mewtwo.asm
+-    db 3 ; catch rate
++    db 100 ; catch rate
+```
+
+---
+
+### Mod 4: Version Differences Removed
+
+**Files modified:** All wild encounter files that previously had `IF DEF(_RED)` / `IF DEF(_BLUE)` conditionals
+
+All version-exclusive Pokemon conditionals have been stripped from wild encounter data. Both Pokemon Red and Pokemon Blue now build with **identical wild encounter tables**. This means:
+
+- No more version-exclusive Pokemon blocking Pokedex completion
+- Both ROMs have the exact same gameplay experience
+- You can complete the full 151 Pokedex in a single version
+
+**Before (example — Cerulean Cave 1F):**
+```asm
+IF DEF(_RED)
+    db 52, ARBOK
+ENDC
+IF DEF(_BLUE)
+    db 52, SANDSLASH
+ENDC
+```
+
+**After:**
+```asm
+    db 58, ARTICUNO    ; same in both versions
+```
+
+---
+
+### Summary of All Files Modified
+
+| Category | Files Changed | What Changed |
+|----------|:------------:|--------------|
+| Starters | 1 | `constants/pokemon_constants.asm` — STARTER1/2/3 constants |
+| Wild Encounters | 60 | Every file in `data/wild/maps/` — complete encounter table rewrites |
+| Catch Rates | 7 | `data/pokemon/base_stats/` — Articuno, Zapdos, Moltres, Mewtwo, Mew, Snorlax, Chansey |
+| **Total** | **68 files** | |
+
+---
+
 ## Bug Fixes
+
+This build also includes **29 bug fixes** across the battle engine, overworld, items, scripts, and audio systems.
 
 ### Battle Engine
 
@@ -589,184 +946,6 @@ The wheel-stop check for the 7 symbol uses `jr c` (jump if less than), but no va
 -    jr c, .stopWheel             ; condition never true
 +    jr z, .stopWheel             ; stop when 7 symbol matches
 ```
-
----
-
-## Gameplay Mods
-
-In addition to the 29 bug fixes above, this build includes the following gameplay modifications:
-
----
-
-### Custom Starters
-
-<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png" width="100">
-<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png" width="100">
-<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" width="100">
-
-**File:** `constants/pokemon_constants.asm` (lines 204-206)
-
-The three starter Pokemon in Oak's Lab have been replaced:
-
-| Pokeball | Original | Modded |
-|----------|----------|--------|
-| Left (STARTER1) | Charmander | **Mew** |
-| Middle (STARTER2) | Squirtle | **Eevee** |
-| Right (STARTER3) | Bulbasaur | **Gengar** |
-
-Your rival picks the starter after yours in the rotation. If you pick Mew, the rival gets Eevee. If you pick Eevee, the rival gets Gengar. If you pick Gengar, the rival gets Mew.
-
----
-
-### Wild Encounter Overhaul
-
-**Files:** All 60 files in `data/wild/maps/*.asm`
-
-Every wild encounter table in the game has been rewritten. Rare, normally-unobtainable, and legendary Pokemon now appear as regular wild encounters throughout the game. Version-exclusive `IF DEF(_RED)` / `IF DEF(_BLUE)` conditionals have been removed so both versions have identical encounters.
-
-#### Encounter Slot Probability
-
-The game engine uses a weighted 10-slot system for wild encounters:
-
-| Slot | Probability | Role in This Mod |
-|------|-------------|------------------|
-| 1 | ~20% | Common rare Pokemon |
-| 2 | ~20% | Common rare Pokemon |
-| 3 | ~15% | Common rare Pokemon |
-| 4 | ~10% | Rare Pokemon |
-| 5 | ~10% | Rare Pokemon |
-| 6 | ~5% | Ultra-rare Pokemon |
-| 7 | ~5% | Legendary Pokemon |
-| 8 | ~4% | Legendary Pokemon |
-| 9 | ~4% | Legendary Pokemon |
-| 10 | ~1% | Legendary Pokemon |
-
-#### Early Game (Routes 1-3, Route 22, Viridian Forest) — Levels 3-10
-
-Top slots filled with Pokemon that are normally one-per-game or trade-only:
-
-- **Common (slots 1-5):** Dratini, Eevee, Chansey, Scyther, Pinsir
-- **Uncommon (slots 6-7):** Lapras, Kangaskhan, Tauros, Porygon
-- **Legendary (slots 8-10):** Articuno, Zapdos, Moltres, Mew (varying by route)
-
-Even Route 1's tall grass can yield a legendary bird at level 8-10.
-
-#### Mid Game (Routes 4-12, 24, 25) — Levels 15-30
-
-Evolved and powerful Pokemon take over the common slots:
-
-- **Common (slots 1-5):** Dragonair, Snorlax, Tauros, Hitmonlee/Hitmonchan, Aerodactyl
-- **Uncommon (slots 6-7):** Kabuto, Omanyte, Porygon (fossil Pokemon in the wild!)
-- **Legendary (slots 8-10):** Mewtwo, Mew, legendary birds
-
-Routes vary between Hitmonlee and Hitmonchan, and rotate through different legendaries in the bottom slots.
-
-#### Late Game (Routes 13-18, 21, 23) — Levels 30-50
-
-Fully-evolved powerhouses dominate:
-
-- **Common (slots 1-4):** Dragonite, Alakazam, Gengar, Machamp
-- **Legendary (slots 5-7):** Articuno, Zapdos, Moltres
-- **Ultra-legendary (slots 8-10):** Mewtwo, Mew, high-level Dragonite
-
-#### Caves
-
-All caves have been converted to rare/legendary hunting grounds:
-
-| Cave | Levels | Theme |
-|------|--------|-------|
-| **Mt. Moon** (3 floors) | 8-14 | Fossil Pokemon (Kabuto, Omanyte, Aerodactyl) + legendaries |
-| **Rock Tunnel** (2 floors) | 16-23 | Fossil Pokemon + legendaries |
-| **Diglett's Cave** | 20-30 | Fossil Pokemon + legendaries |
-| **Seafoam Islands** (5 floors) | 30-48 | Fossil Pokemon with increasing legendary density per floor |
-| **Victory Road** (3 floors) | 40-55 | High-level fossils and legendaries, Mewtwo at 50-55 |
-
-Cave encounter pattern (all caves):
-- Slots 1-3: Kabuto, Omanyte, Aerodactyl
-- Slots 4-6: Chansey, Ditto, Porygon
-- Slots 7-10: Articuno, Zapdos, Moltres, Mewtwo
-
-#### Pokemon Tower (Floors 3-7) — Levels 20-35
-
-Ghost-themed with legendaries mixed in:
-
-- **Common:** Gengar, Haunter, Gastly
-- **Uncommon:** Chansey, Ditto, Porygon
-- **Legendary:** Articuno, Zapdos, Moltres, Mewtwo, Mew
-
-Floors 1-2 remain empty (lobby/no encounters) as in vanilla.
-
-#### Pokemon Mansion (4 floors) — Levels 32-46
-
-Fire-type theme with rare spawns:
-
-- **Common:** Arcanine, Ninetales, Rapidash
-- **Uncommon:** Kabuto, Omanyte, Aerodactyl
-- **Legendary:** Articuno, Zapdos, Moltres, Mewtwo, Mew
-
-#### Power Plant — Levels 30-40
-
-Electric-type theme with heavy Zapdos representation:
-
-- **Common:** Electabuzz, Raichu, Magneton
-- **Uncommon:** Zapdos (higher rate than other areas), Porygon
-- **Legendary:** Articuno, Moltres, Mewtwo, Mew
-
-#### Safari Zone (4 areas) — Levels 24-35
-
-All four Safari Zone areas now have the rarest Pokemon in the game as common catches:
-
-- **Common:** Chansey, Kangaskhan, Tauros, Scyther, Pinsir, Dratini
-- **Uncommon:** Dragonair
-- **Legendary:** Articuno, Zapdos, Moltres, Mewtwo, Mew (varying by area)
-
-#### Sea Routes (Surfing) — Levels 25-45
-
-Water encounters completely overhauled:
-
-- **Common:** Lapras, Gyarados, Starmie
-- **Uncommon:** Dragonair, Seadra, Cloyster
-- **Legendary:** Articuno, Mew, Mewtwo, Dragonite
-
-Route 21 also has water encounters with the same rare/legendary theme.
-
-#### Cerulean Cave (Endgame) — Levels 55-70
-
-The ultimate hunting ground. Every encounter is a powerhouse:
-
-| Floor | Level Range | Encounters |
-|-------|------------|------------|
-| **1F** | 55-65 | Dragonite, Alakazam, Gengar, Machamp, all legendaries |
-| **2F** | 58-68 | Same roster at higher levels |
-| **B1F** | 60-70 | Highest levels in the game. Mewtwo up to level 70 |
-
-All three floors: Dragonite, Alakazam, Gengar, Machamp in common slots; Articuno, Zapdos, Moltres, Mewtwo, Mew in legendary slots.
-
----
-
-### Boosted Legendary Catch Rates
-
-**Files:** `data/pokemon/base_stats/*.asm`
-
-Legendary and rare Pokemon catch rates have been significantly increased so they're actually catchable when encountered in the wild. The Gen 1 catch rate scale is 0-255 (higher = easier). For reference, Pidgey is 255 and a regular Great Ball catch.
-
-| Pokemon | Original Catch Rate | Modded Catch Rate |
-|---------|-------------------|------------------|
-| Articuno | 3 | **100** |
-| Zapdos | 3 | **100** |
-| Moltres | 3 | **100** |
-| Mewtwo | 3 | **100** |
-| Mew | 45 | **100** |
-| Snorlax | 25 | **100** |
-| Chansey | 30 | **100** |
-
-At catch rate 100, you have a solid chance with Great Balls and Ultra Balls. Not a guaranteed catch, but no longer requires 50 Ultra Balls and a prayer.
-
----
-
-### Version Differences Removed
-
-All `IF DEF(_RED)` / `IF DEF(_BLUE)` conditionals have been stripped from wild encounter data. Both Pokemon Red and Pokemon Blue now have **identical wild encounter tables**. No more version exclusives blocking Pokedex completion.
 
 ---
 
