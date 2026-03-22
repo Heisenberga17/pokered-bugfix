@@ -1,29 +1,15 @@
 Route25WildMons:
-	def_grass_wildmons 15 ; encounter rate
-IF DEF(_RED)
-	db  8, WEEDLE
-	db  9, KAKUNA
-	db 13, PIDGEY
-	db 12, ODDISH
-	db 13, ODDISH
-	db 12, ABRA
-	db 14, ODDISH
-	db 10, ABRA
-	db  7, METAPOD
-	db  8, CATERPIE
-ENDC
-IF DEF(_BLUE)
-	db  8, CATERPIE
-	db  9, METAPOD
-	db 13, PIDGEY
-	db 12, BELLSPROUT
-	db 13, BELLSPROUT
-	db 12, ABRA
-	db 14, BELLSPROUT
-	db 10, ABRA
-	db  7, KAKUNA
-	db  8, WEEDLE
-ENDC
+	def_grass_wildmons 20 ; encounter rate
+	db 16, DRAGONAIR
+	db 15, SNORLAX
+	db 17, TAUROS
+	db 16, HITMONCHAN
+	db 17, AERODACTYL
+	db 15, KABUTO
+	db 16, PORYGON
+	db 22, MEWTWO
+	db 20, MEW
+	db 22, MOLTRES
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

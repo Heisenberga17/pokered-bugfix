@@ -1,15 +1,15 @@
 RockTunnel1FWildMons:
 	def_grass_wildmons 15 ; encounter rate
-	db 16, ZUBAT
-	db 17, ZUBAT
-	db 17, GEODUDE
-	db 15, MACHOP
-	db 16, GEODUDE
-	db 18, ZUBAT
-	db 15, ZUBAT
-	db 17, MACHOP
-	db 13, ONIX
-	db 15, ONIX
+	db 16, KABUTO
+	db 16, OMANYTE
+	db 17, AERODACTYL
+	db 16, CHANSEY
+	db 17, DITTO
+	db 18, PORYGON
+	db 18, ARTICUNO
+	db 18, ZAPDOS
+	db 20, MOLTRES
+	db 22, MEWTWO
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

@@ -1,15 +1,15 @@
 Route17WildMons:
 	def_grass_wildmons 25 ; encounter rate
-	db 20, SPEAROW
-	db 22, SPEAROW
-	db 25, RATICATE
-	db 24, DODUO
-	db 27, RATICATE
-	db 26, DODUO
-	db 28, DODUO
-	db 29, RATICATE
-	db 25, FEAROW
-	db 27, FEAROW
+	db 35, DRAGONITE
+	db 33, ALAKAZAM
+	db 36, GENGAR
+	db 35, MACHAMP
+	db 38, ARTICUNO
+	db 37, ZAPDOS
+	db 38, MOLTRES
+	db 42, MEWTWO
+	db 40, MEW
+	db 45, DRAGONITE
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

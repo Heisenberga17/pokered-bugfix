@@ -1,15 +1,15 @@
 PokemonTower4FWildMons:
 	def_grass_wildmons 10 ; encounter rate
-	db 20, GASTLY
-	db 21, GASTLY
-	db 22, GASTLY
+	db 21, GENGAR
+	db 22, HAUNTER
 	db 23, GASTLY
-	db 19, GASTLY
-	db 18, GASTLY
-	db 25, HAUNTER
-	db 20, CUBONE
-	db 22, CUBONE
-	db 24, GASTLY
+	db 21, CHANSEY
+	db 23, DITTO
+	db 24, PORYGON
+	db 26, ARTICUNO
+	db 26, ZAPDOS
+	db 28, MOLTRES
+	db 30, MEW
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

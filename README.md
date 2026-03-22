@@ -592,6 +592,184 @@ The wheel-stop check for the 7 symbol uses `jr c` (jump if less than), but no va
 
 ---
 
+## Gameplay Mods
+
+In addition to the 29 bug fixes above, this build includes the following gameplay modifications:
+
+---
+
+### Custom Starters
+
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png" width="100">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png" width="100">
+<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" width="100">
+
+**File:** `constants/pokemon_constants.asm` (lines 204-206)
+
+The three starter Pokemon in Oak's Lab have been replaced:
+
+| Pokeball | Original | Modded |
+|----------|----------|--------|
+| Left (STARTER1) | Charmander | **Mew** |
+| Middle (STARTER2) | Squirtle | **Eevee** |
+| Right (STARTER3) | Bulbasaur | **Gengar** |
+
+Your rival picks the starter after yours in the rotation. If you pick Mew, the rival gets Eevee. If you pick Eevee, the rival gets Gengar. If you pick Gengar, the rival gets Mew.
+
+---
+
+### Wild Encounter Overhaul
+
+**Files:** All 60 files in `data/wild/maps/*.asm`
+
+Every wild encounter table in the game has been rewritten. Rare, normally-unobtainable, and legendary Pokemon now appear as regular wild encounters throughout the game. Version-exclusive `IF DEF(_RED)` / `IF DEF(_BLUE)` conditionals have been removed so both versions have identical encounters.
+
+#### Encounter Slot Probability
+
+The game engine uses a weighted 10-slot system for wild encounters:
+
+| Slot | Probability | Role in This Mod |
+|------|-------------|------------------|
+| 1 | ~20% | Common rare Pokemon |
+| 2 | ~20% | Common rare Pokemon |
+| 3 | ~15% | Common rare Pokemon |
+| 4 | ~10% | Rare Pokemon |
+| 5 | ~10% | Rare Pokemon |
+| 6 | ~5% | Ultra-rare Pokemon |
+| 7 | ~5% | Legendary Pokemon |
+| 8 | ~4% | Legendary Pokemon |
+| 9 | ~4% | Legendary Pokemon |
+| 10 | ~1% | Legendary Pokemon |
+
+#### Early Game (Routes 1-3, Route 22, Viridian Forest) — Levels 3-10
+
+Top slots filled with Pokemon that are normally one-per-game or trade-only:
+
+- **Common (slots 1-5):** Dratini, Eevee, Chansey, Scyther, Pinsir
+- **Uncommon (slots 6-7):** Lapras, Kangaskhan, Tauros, Porygon
+- **Legendary (slots 8-10):** Articuno, Zapdos, Moltres, Mew (varying by route)
+
+Even Route 1's tall grass can yield a legendary bird at level 8-10.
+
+#### Mid Game (Routes 4-12, 24, 25) — Levels 15-30
+
+Evolved and powerful Pokemon take over the common slots:
+
+- **Common (slots 1-5):** Dragonair, Snorlax, Tauros, Hitmonlee/Hitmonchan, Aerodactyl
+- **Uncommon (slots 6-7):** Kabuto, Omanyte, Porygon (fossil Pokemon in the wild!)
+- **Legendary (slots 8-10):** Mewtwo, Mew, legendary birds
+
+Routes vary between Hitmonlee and Hitmonchan, and rotate through different legendaries in the bottom slots.
+
+#### Late Game (Routes 13-18, 21, 23) — Levels 30-50
+
+Fully-evolved powerhouses dominate:
+
+- **Common (slots 1-4):** Dragonite, Alakazam, Gengar, Machamp
+- **Legendary (slots 5-7):** Articuno, Zapdos, Moltres
+- **Ultra-legendary (slots 8-10):** Mewtwo, Mew, high-level Dragonite
+
+#### Caves
+
+All caves have been converted to rare/legendary hunting grounds:
+
+| Cave | Levels | Theme |
+|------|--------|-------|
+| **Mt. Moon** (3 floors) | 8-14 | Fossil Pokemon (Kabuto, Omanyte, Aerodactyl) + legendaries |
+| **Rock Tunnel** (2 floors) | 16-23 | Fossil Pokemon + legendaries |
+| **Diglett's Cave** | 20-30 | Fossil Pokemon + legendaries |
+| **Seafoam Islands** (5 floors) | 30-48 | Fossil Pokemon with increasing legendary density per floor |
+| **Victory Road** (3 floors) | 40-55 | High-level fossils and legendaries, Mewtwo at 50-55 |
+
+Cave encounter pattern (all caves):
+- Slots 1-3: Kabuto, Omanyte, Aerodactyl
+- Slots 4-6: Chansey, Ditto, Porygon
+- Slots 7-10: Articuno, Zapdos, Moltres, Mewtwo
+
+#### Pokemon Tower (Floors 3-7) — Levels 20-35
+
+Ghost-themed with legendaries mixed in:
+
+- **Common:** Gengar, Haunter, Gastly
+- **Uncommon:** Chansey, Ditto, Porygon
+- **Legendary:** Articuno, Zapdos, Moltres, Mewtwo, Mew
+
+Floors 1-2 remain empty (lobby/no encounters) as in vanilla.
+
+#### Pokemon Mansion (4 floors) — Levels 32-46
+
+Fire-type theme with rare spawns:
+
+- **Common:** Arcanine, Ninetales, Rapidash
+- **Uncommon:** Kabuto, Omanyte, Aerodactyl
+- **Legendary:** Articuno, Zapdos, Moltres, Mewtwo, Mew
+
+#### Power Plant — Levels 30-40
+
+Electric-type theme with heavy Zapdos representation:
+
+- **Common:** Electabuzz, Raichu, Magneton
+- **Uncommon:** Zapdos (higher rate than other areas), Porygon
+- **Legendary:** Articuno, Moltres, Mewtwo, Mew
+
+#### Safari Zone (4 areas) — Levels 24-35
+
+All four Safari Zone areas now have the rarest Pokemon in the game as common catches:
+
+- **Common:** Chansey, Kangaskhan, Tauros, Scyther, Pinsir, Dratini
+- **Uncommon:** Dragonair
+- **Legendary:** Articuno, Zapdos, Moltres, Mewtwo, Mew (varying by area)
+
+#### Sea Routes (Surfing) — Levels 25-45
+
+Water encounters completely overhauled:
+
+- **Common:** Lapras, Gyarados, Starmie
+- **Uncommon:** Dragonair, Seadra, Cloyster
+- **Legendary:** Articuno, Mew, Mewtwo, Dragonite
+
+Route 21 also has water encounters with the same rare/legendary theme.
+
+#### Cerulean Cave (Endgame) — Levels 55-70
+
+The ultimate hunting ground. Every encounter is a powerhouse:
+
+| Floor | Level Range | Encounters |
+|-------|------------|------------|
+| **1F** | 55-65 | Dragonite, Alakazam, Gengar, Machamp, all legendaries |
+| **2F** | 58-68 | Same roster at higher levels |
+| **B1F** | 60-70 | Highest levels in the game. Mewtwo up to level 70 |
+
+All three floors: Dragonite, Alakazam, Gengar, Machamp in common slots; Articuno, Zapdos, Moltres, Mewtwo, Mew in legendary slots.
+
+---
+
+### Boosted Legendary Catch Rates
+
+**Files:** `data/pokemon/base_stats/*.asm`
+
+Legendary and rare Pokemon catch rates have been significantly increased so they're actually catchable when encountered in the wild. The Gen 1 catch rate scale is 0-255 (higher = easier). For reference, Pidgey is 255 and a regular Great Ball catch.
+
+| Pokemon | Original Catch Rate | Modded Catch Rate |
+|---------|-------------------|------------------|
+| Articuno | 3 | **100** |
+| Zapdos | 3 | **100** |
+| Moltres | 3 | **100** |
+| Mewtwo | 3 | **100** |
+| Mew | 45 | **100** |
+| Snorlax | 25 | **100** |
+| Chansey | 30 | **100** |
+
+At catch rate 100, you have a solid chance with Great Balls and Ultra Balls. Not a guaranteed catch, but no longer requires 50 Ultra Balls and a prayer.
+
+---
+
+### Version Differences Removed
+
+All `IF DEF(_RED)` / `IF DEF(_BLUE)` conditionals have been stripped from wild encounter data. Both Pokemon Red and Pokemon Blue now have **identical wild encounter tables**. No more version exclusives blocking Pokedex completion.
+
+---
+
 ## Open Bugs
 
 There is **1 known bug** that is intentionally left unfixed. See [**KNOWN_BUGS.md**](KNOWN_BUGS.md) for details:
